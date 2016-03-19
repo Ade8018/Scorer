@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="添加兑换记录，兑换分数为1-1000随机，兑换时间为当前时间前后4天内随机。"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_test_record_account"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:editable="false"
+        android:hint="选择操作员" />
+
+    <EditText
+        android:id="@+id/et_test_record_printer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:editable="false"
+        android:hint="选择打印机" />
+
+    <EditText
+        android:id="@+id/et_test_record_count"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:hint="添加记录数量"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btn_test_record_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="添加" >
+    </Button>
+
+</LinearLayout>

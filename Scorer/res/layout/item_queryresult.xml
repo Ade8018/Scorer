@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/tv_queryresult_id"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="积分券ID" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="40dp"
+        android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tv_queryresult_printersn"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="打印机" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="40dp"
+        android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tv_queryresult_score"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="积分" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="40dp"
+        android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tv_queryresult_printtime"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="打印时间" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="40dp"
+        android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tv_queryresult_exctime"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="兑换时间" />
+
+</LinearLayout>

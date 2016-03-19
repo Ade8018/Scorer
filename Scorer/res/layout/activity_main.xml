@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/btn_main_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="自动扫描" />
+
+    <Button
+        android:id="@+id/btn_main_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="用户登录" />
+
+    <Button
+        android:id="@+id/btn_main_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="高级设置"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_main_testfunc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试功能" />
+
+    <Button
+        android:id="@+id/btn_main_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="退出登录" />
+
+</LinearLayout>

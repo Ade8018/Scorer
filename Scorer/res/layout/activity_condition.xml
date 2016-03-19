@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <include layout="@layout/actionbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#000000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="选择打印机"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/tv_condition_printer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="所有打印机"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="20dp"
+        android:background="#000000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="积分券打印时间"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/tv_condition_print_starttime"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="2000-1-1 00:00:00"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_condition_print_endtime"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="2099-12-12 23:59:59"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="20dp"
+        android:background="#000000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="积分券兑换时间"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/tv_condition_exc_starttime"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="2000-1-1 00:00:00"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_condition_exc_endtime"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="2099-12-12 23:59:59"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_condition_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="查  询" />
+
+</LinearLayout>
