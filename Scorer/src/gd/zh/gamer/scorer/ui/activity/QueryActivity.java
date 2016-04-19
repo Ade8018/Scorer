@@ -19,7 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ConditionActivity extends Activity implements OnClickListener, OnTimeSaveListener {
+public class QueryActivity extends Activity implements OnClickListener, OnTimeSaveListener {
 	private TextView mTvPrintStartTime;
 	private TextView mTvPrintEndTime;
 	private TextView mTvExcStartTime;
