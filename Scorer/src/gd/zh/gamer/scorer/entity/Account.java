@@ -9,9 +9,7 @@ public class Account {
     private Long id;
     private String account;
     private String password;
-    private String name;
     private Integer type;
-    private Long manager_id;
 
     public Account() {
     }
@@ -20,13 +18,11 @@ public class Account {
         this.id = id;
     }
 
-    public Account(Long id, String account, String password, String name, Integer type, Long manager_id) {
+    public Account(Long id, String account, String password, Integer type) {
         this.id = id;
         this.account = account;
         this.password = password;
-        this.name = name;
         this.type = type;
-        this.manager_id = manager_id;
     }
 
     public Long getId() {
@@ -53,28 +49,12 @@ public class Account {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getType() {
         return type;
     }
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public Long getManager_id() {
-        return manager_id;
-    }
-
-    public void setManager_id(Long manager_id) {
-        this.manager_id = manager_id;
     }
 
 }

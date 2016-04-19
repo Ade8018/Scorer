@@ -24,9 +24,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Account = new Property(1, String.class, "account", false, "ACCOUNT");
         public final static Property Password = new Property(2, String.class, "password", false, "PASSWORD");
-        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property Type = new Property(4, Integer.class, "type", false, "TYPE");
-        public final static Property Manager_id = new Property(5, Long.class, "manager_id", false, "MANAGER_ID");
+        public final static Property Type = new Property(3, Integer.class, "type", false, "TYPE");
     };
 
 
@@ -45,9 +43,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ACCOUNT\" TEXT," + // 1: account
                 "\"PASSWORD\" TEXT," + // 2: password
-                "\"NAME\" TEXT," + // 3: name
-                "\"TYPE\" INTEGER," + // 4: type
-                "\"MANAGER_ID\" INTEGER);"); // 5: manager_id
+                "\"TYPE\" INTEGER);"); // 3: type
     }
 
     /** Drops the underlying database table. */
@@ -76,19 +72,9 @@ public class AccountDao extends AbstractDao<Account, Long> {
             stmt.bindString(3, password);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(4, name);
-        }
- 
         Integer type = entity.getType();
         if (type != null) {
-            stmt.bindLong(5, type);
-        }
- 
-        Long manager_id = entity.getManager_id();
-        if (manager_id != null) {
-            stmt.bindLong(6, manager_id);
+            stmt.bindLong(4, type);
         }
     }
 
@@ -105,9 +91,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // account
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // password
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // type
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // manager_id
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3) // type
         );
         return entity;
     }
@@ -118,9 +102,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAccount(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPassword(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setType(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setManager_id(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
      }
     
     /** @inheritdoc */

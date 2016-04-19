@@ -19,7 +19,6 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         AccountDao.createTable(db, ifNotExists);
         PrinterDao.createTable(db, ifNotExists);
-        AuthorizationDao.createTable(db, ifNotExists);
         RecordDao.createTable(db, ifNotExists);
     }
     
@@ -27,7 +26,6 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         AccountDao.dropTable(db, ifExists);
         PrinterDao.dropTable(db, ifExists);
-        AuthorizationDao.dropTable(db, ifExists);
         RecordDao.dropTable(db, ifExists);
     }
     
@@ -62,7 +60,6 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(AccountDao.class);
         registerDaoClass(PrinterDao.class);
-        registerDaoClass(AuthorizationDao.class);
         registerDaoClass(RecordDao.class);
     }
     

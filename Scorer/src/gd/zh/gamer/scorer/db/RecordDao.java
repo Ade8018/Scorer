@@ -26,7 +26,6 @@ public class RecordDao extends AbstractDao<Record, Long> {
         public final static Property Print_time = new Property(2, long.class, "print_time", false, "PRINT_TIME");
         public final static Property Exc_time = new Property(3, long.class, "exc_time", false, "EXC_TIME");
         public final static Property Printer_id = new Property(4, Long.class, "printer_id", false, "PRINTER_ID");
-        public final static Property Account_id = new Property(5, Long.class, "account_id", false, "ACCOUNT_ID");
     };
 
 
@@ -46,8 +45,7 @@ public class RecordDao extends AbstractDao<Record, Long> {
                 "\"SCORE\" INTEGER NOT NULL ," + // 1: score
                 "\"PRINT_TIME\" INTEGER NOT NULL ," + // 2: print_time
                 "\"EXC_TIME\" INTEGER NOT NULL ," + // 3: exc_time
-                "\"PRINTER_ID\" INTEGER," + // 4: printer_id
-                "\"ACCOUNT_ID\" INTEGER);"); // 5: account_id
+                "\"PRINTER_ID\" INTEGER);"); // 4: printer_id
     }
 
     /** Drops the underlying database table. */
@@ -73,11 +71,6 @@ public class RecordDao extends AbstractDao<Record, Long> {
         if (printer_id != null) {
             stmt.bindLong(5, printer_id);
         }
- 
-        Long account_id = entity.getAccount_id();
-        if (account_id != null) {
-            stmt.bindLong(6, account_id);
-        }
     }
 
     /** @inheritdoc */
@@ -94,8 +87,7 @@ public class RecordDao extends AbstractDao<Record, Long> {
             cursor.getInt(offset + 1), // score
             cursor.getLong(offset + 2), // print_time
             cursor.getLong(offset + 3), // exc_time
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // printer_id
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // account_id
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // printer_id
         );
         return entity;
     }
@@ -108,7 +100,6 @@ public class RecordDao extends AbstractDao<Record, Long> {
         entity.setPrint_time(cursor.getLong(offset + 2));
         entity.setExc_time(cursor.getLong(offset + 3));
         entity.setPrinter_id(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
-        entity.setAccount_id(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

@@ -11,7 +11,6 @@ public class Record {
     private long print_time;
     private long exc_time;
     private Long printer_id;
-    private Long account_id;
 
     public Record() {
     }
@@ -20,13 +19,12 @@ public class Record {
         this.id = id;
     }
 
-    public Record(Long id, int score, long print_time, long exc_time, Long printer_id, Long account_id) {
+    public Record(Long id, int score, long print_time, long exc_time, Long printer_id) {
         this.id = id;
         this.score = score;
         this.print_time = print_time;
         this.exc_time = exc_time;
         this.printer_id = printer_id;
-        this.account_id = account_id;
     }
 
     public Long getId() {
@@ -67,14 +65,6 @@ public class Record {
 
     public void setPrinter_id(Long printer_id) {
         this.printer_id = printer_id;
-    }
-
-    public Long getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(Long account_id) {
-        this.account_id = account_id;
     }
 
 }

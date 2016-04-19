@@ -1,7 +1,6 @@
 package gd.zh.gamer.scorer.db;
 
 import gd.zh.gamer.scorer.entity.Account;
-import gd.zh.gamer.scorer.entity.Authorization;
 import gd.zh.gamer.scorer.entity.Printer;
 import gd.zh.gamer.scorer.entity.Record;
 
@@ -24,12 +23,10 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig accountDaoConfig;
     private final DaoConfig printerDaoConfig;
-    private final DaoConfig authorizationDaoConfig;
     private final DaoConfig recordDaoConfig;
 
     private final AccountDao accountDao;
     private final PrinterDao printerDao;
-    private final AuthorizationDao authorizationDao;
     private final RecordDao recordDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
@@ -42,27 +39,21 @@ public class DaoSession extends AbstractDaoSession {
         printerDaoConfig = daoConfigMap.get(PrinterDao.class).clone();
         printerDaoConfig.initIdentityScope(type);
 
-        authorizationDaoConfig = daoConfigMap.get(AuthorizationDao.class).clone();
-        authorizationDaoConfig.initIdentityScope(type);
-
         recordDaoConfig = daoConfigMap.get(RecordDao.class).clone();
         recordDaoConfig.initIdentityScope(type);
 
         accountDao = new AccountDao(accountDaoConfig, this);
         printerDao = new PrinterDao(printerDaoConfig, this);
-        authorizationDao = new AuthorizationDao(authorizationDaoConfig, this);
         recordDao = new RecordDao(recordDaoConfig, this);
 
         registerDao(Account.class, accountDao);
         registerDao(Printer.class, printerDao);
-        registerDao(Authorization.class, authorizationDao);
         registerDao(Record.class, recordDao);
     }
     
     public void clear() {
         accountDaoConfig.getIdentityScope().clear();
         printerDaoConfig.getIdentityScope().clear();
-        authorizationDaoConfig.getIdentityScope().clear();
         recordDaoConfig.getIdentityScope().clear();
     }
 
@@ -72,10 +63,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public PrinterDao getPrinterDao() {
         return printerDao;
-    }
-
-    public AuthorizationDao getAuthorizationDao() {
-        return authorizationDao;
     }
 
     public RecordDao getRecordDao() {

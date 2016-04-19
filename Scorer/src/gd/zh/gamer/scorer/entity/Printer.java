@@ -10,7 +10,6 @@ public class Printer {
     /** Not-null value. */
     private String sn;
     private String name;
-    private Long manager_id;
 
     public Printer() {
     }
@@ -19,11 +18,10 @@ public class Printer {
         this.id = id;
     }
 
-    public Printer(Long id, String sn, String name, Long manager_id) {
+    public Printer(Long id, String sn, String name) {
         this.id = id;
         this.sn = sn;
         this.name = name;
-        this.manager_id = manager_id;
     }
 
     public Long getId() {
@@ -50,14 +48,6 @@ public class Printer {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getManager_id() {
-        return manager_id;
-    }
-
-    public void setManager_id(Long manager_id) {
-        this.manager_id = manager_id;
     }
 
 }

@@ -24,7 +24,6 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Sn = new Property(1, String.class, "sn", false, "SN");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Manager_id = new Property(3, Long.class, "manager_id", false, "MANAGER_ID");
     };
 
 
@@ -42,8 +41,7 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"PRINTER\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"SN\" TEXT NOT NULL ," + // 1: sn
-                "\"NAME\" TEXT," + // 2: name
-                "\"MANAGER_ID\" INTEGER);"); // 3: manager_id
+                "\"NAME\" TEXT);"); // 2: name
     }
 
     /** Drops the underlying database table. */
@@ -67,11 +65,6 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
- 
-        Long manager_id = entity.getManager_id();
-        if (manager_id != null) {
-            stmt.bindLong(4, manager_id);
-        }
     }
 
     /** @inheritdoc */
@@ -86,8 +79,7 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         Printer entity = new Printer( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // sn
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // manager_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // name
         );
         return entity;
     }
@@ -98,7 +90,6 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setSn(cursor.getString(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setManager_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
