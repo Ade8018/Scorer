@@ -2,20 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:text="I&apos;m  LOGO"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/btn_register_manager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn"
         android:text="绑定管理员账户" />
 
     <Button
         android:id="@+id/btn_register_operator"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn"
         android:text="注册为操作员" />
 
 </LinearLayout>

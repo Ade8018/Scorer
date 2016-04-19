@@ -1,40 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/et_register_manager_account"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入账号"
-        android:inputType="text"
-        android:maxLength="15"
-        android:singleLine="true" />
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
 
-    <EditText
-        android:id="@+id/et_register_manager_pwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入密码"
-        android:inputType="text"
-        android:maxLength="12"
-        android:singleLine="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/avatar" />
 
-    <EditText
-        android:id="@+id/et_register_manager_register_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入注册码"
-        android:inputType="text"
-        android:maxLength="8"
-        android:singleLine="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="绑定管理员账户：" />
 
-    <Button
-        android:id="@+id/btn_register_manager_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注册" />
+        <EditText
+            android:id="@+id/et_register_manager_account"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit"
+            android:hint="请输入账号"
+            android:inputType="text"
+            android:maxLength="15"
+            android:paddingLeft="10dp"
+            android:singleLine="true" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/et_register_manager_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:maxLength="12"
+            android:paddingLeft="10dp"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/et_register_manager_register_code"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit"
+            android:hint="请输入注册码"
+            android:inputType="text"
+            android:maxLength="8"
+            android:paddingLeft="10dp"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btn_register_manager_register"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn"
+            android:text="注册" />
+    </LinearLayout>
+
+</ScrollView>
