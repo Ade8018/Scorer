@@ -25,6 +25,7 @@
         android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.RegisterActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +39,7 @@
         </activity>
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.MenuActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity

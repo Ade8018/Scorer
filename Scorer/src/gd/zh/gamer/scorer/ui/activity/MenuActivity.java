@@ -19,7 +19,7 @@ import com.google.zxing.client.android.CaptureActivity;
 
 public class MenuActivity extends Activity implements OnClickListener {
 	private Button btnAuth;
-	private Account acc;
+	private Account account;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		if (accs == null || accs.size() != 1) {
 			throw new RuntimeException();
 		}
-		acc = accs.get(0);
+		account = accs.get(0);
 
 		findViews();
 	}
@@ -77,12 +77,12 @@ public class MenuActivity extends Activity implements OnClickListener {
 			startActivity(query);
 		} else {
 			// TODO pop dialog to ask manager pwd
-			
+
 		}
 
 	}
 
 	private boolean isManager() {
-		return Account.TYPE_MANAGER == acc.getType();
+		return Account.TYPE_MANAGER == account.getType();
 	}
 }
