@@ -5,56 +5,58 @@ package gd.zh.gamer.scorer.entity;
  * Entity mapped to table "ACCOUNT".
  */
 public class Account {
+	public static final int TYPE_MANAGER = 1;
+	public static final int TYPE_OPERATOR = 2;
 
-    private Long id;
-    private String account;
-    private String password;
-    private Integer type;
+	private Long id;
+	private String account;
+	private String password;
+	private Integer type;
 
-    public Account() {
-    }
+	public Account() {
+	}
 
-    public Account(Long id) {
-        this.id = id;
-    }
+	public Account(Long id) {
+		this.id = id;
+	}
 
-    public Account(Long id, String account, String password, Integer type) {
-        this.id = id;
-        this.account = account;
-        this.password = password;
-        this.type = type;
-    }
+	public Account(Long id, String account, String password, Integer type) {
+		this.id = id;
+		this.account = account;
+		this.password = password;
+		this.type = type;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getAccount() {
-        return account;
-    }
+	public String getAccount() {
+		return account;
+	}
 
-    public void setAccount(String account) {
-        this.account = account;
-    }
+	public void setAccount(String account) {
+		this.account = account;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public Integer getType() {
-        return type;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
 }
