@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
-public class ManagerRegisterActivity extends Activity implements
-		OnClickListener {
+public class ManagerBindActivity extends Activity implements OnClickListener {
+	public static final String REGISTER_CODE = "88888888";
 	private EditText etAccount;
 	private EditText etPwd;
 	private EditText etRegCode;
@@ -65,8 +65,17 @@ public class ManagerRegisterActivity extends Activity implements
 			return;
 		}
 
+		if (!verifyRegCode(regCode)) {
+			ToastUtil.shortToast(this, "注册码错误");
+			return;
+		}
+		
 		Account acc = new Account(null, account, pwd, Account.TYPE_MANAGER);
 		saveAccount(acc);
+	}
+
+	public static boolean verifyRegCode(String regCode) {
+		return REGISTER_CODE.equals(regCode);
 	}
 
 	private void saveAccount(Account acc) {

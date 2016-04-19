@@ -32,13 +32,11 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		DaoMaster dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();
 		AccountDao ad = ds.getAccountDao();
-		List<Account> accs = ad.queryBuilder()
-				.where(AccountDao.Properties.Type.eq(Account.TYPE_MANAGER))
-				.list();
+		List<Account> accs = ad.queryBuilder().list();
 		if (accs != null) {
-			if (accs.size() > 1) {// 注册了多个管理员，此情况不应该出现
+			if (accs.size() > 1) {// 注册了多个账户，此情况不应该出现
 				throw new RuntimeException();
-			} else if (accs.size() == 1) {// 已注册过管理员
+			} else if (accs.size() == 1) {// 已注册过
 				jumpToMenuActivity();
 				finish();
 				return;
@@ -70,7 +68,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_register_manager:
-			Intent intent = new Intent(this, ManagerRegisterActivity.class);
+			Intent intent = new Intent(this, ManagerBindActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.btn_register_operator:

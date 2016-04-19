@@ -11,6 +11,9 @@ public class Account {
 	private Long id;
 	private String account;
 	private String password;
+	/**
+	 * 当前使用App的用户的种类，而不是这个账号的种类
+	 */
 	private Integer type;
 
 	public Account() {

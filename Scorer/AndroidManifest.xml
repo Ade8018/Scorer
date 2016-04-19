@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="gd.zh.gamer.scorer.ui.activity.ManagerRegisterActivity"
+            android:name="gd.zh.gamer.scorer.ui.activity.ManagerBindActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
