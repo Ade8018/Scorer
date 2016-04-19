@@ -35,6 +35,8 @@ public class MenuActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_menu_authorize:
+			Intent auth = new Intent(this, AuthorizeActivity.class);
+			startActivity(auth);
 			break;
 		case R.id.btn_menu_history:
 			Intent query = new Intent(this, QueryActivity.class);

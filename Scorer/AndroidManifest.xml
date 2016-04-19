@@ -40,6 +40,14 @@
             android:name="gd.zh.gamer.scorer.ui.activity.MenuActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="gd.zh.gamer.scorer.ui.activity.QueryActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="gd.zh.gamer.scorer.ui.activity.AuthorizeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!--
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
