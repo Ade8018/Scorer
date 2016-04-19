@@ -7,7 +7,6 @@ import gd.zh.gamer.scorer.util.ActionBarUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -61,7 +60,6 @@ public class QueryActivity extends Activity implements OnClickListener, OnTimeSa
 	}
 
 	private void setData() {
-		AlertDialog.Builder builder = new Builder(this);
 	}
 
 	@Override

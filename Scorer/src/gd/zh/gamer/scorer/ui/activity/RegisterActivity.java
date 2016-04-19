@@ -2,6 +2,8 @@ package gd.zh.gamer.scorer.ui.activity;
 
 import java.util.List;
 
+import com.google.zxing.client.android.CaptureActivity;
+
 import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
 import gd.zh.gamer.scorer.db.AccountDao;
@@ -32,7 +34,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		DaoMaster dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();
 		AccountDao ad = ds.getAccountDao();
-		List<Account> accs = ad.queryBuilder().list();
+		List<Account> accs = ad.loadAll();
 		if (accs != null) {
 			if (accs.size() > 1) {// 注册了多个账户，此情况不应该出现
 				throw new RuntimeException();
@@ -72,6 +74,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.btn_register_operator:
+			Intent cap = new Intent(this, CaptureActivity.class);
+			startActivity(cap);
 			break;
 		default:
 			break;

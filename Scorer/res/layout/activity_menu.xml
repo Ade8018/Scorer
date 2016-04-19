@@ -20,6 +20,7 @@
         android:id="@+id/btn_menu_authorize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="授权" />
+        android:text="授权"
+        android:visibility="gone" />
 
 </LinearLayout>

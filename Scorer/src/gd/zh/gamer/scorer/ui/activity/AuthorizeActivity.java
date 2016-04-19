@@ -6,7 +6,6 @@ import gd.zh.gamer.scorer.db.AccountDao;
 import gd.zh.gamer.scorer.db.DaoMaster;
 import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.entity.Account;
-import gd.zh.gamer.scorer.util.ToastUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +26,7 @@ import com.google.zxing.common.BitMatrix;
 public class AuthorizeActivity extends Activity {
 	public static final String TAG = "AuthorizeActivity";
 	private ImageView iv;
+	private Bitmap bm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +34,31 @@ public class AuthorizeActivity extends Activity {
 		setContentView(R.layout.activity_authorize);
 
 		iv = (ImageView) findViewById(R.id.iv_authorize);
-		int length = iv.getWidth();
 
-		String content = getAuthString();
+	}
 
-		Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
-		hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-		try {
-			BitMatrix bitMatrix = new MultiFormatWriter().encode(content,
-					BarcodeFormat.QR_CODE, length, length, hints);
-			Bitmap bm = getMatrixBitmap(bitMatrix, length);
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		Log.e(TAG, "onWindowFocusChanged " + hasFocus);
+		if (hasFocus) {
 
-			iv.setImageBitmap(bm);
-		} catch (WriterException e) {
-			e.printStackTrace();
+			int length = iv.getWidth();
+
+			String content = getAuthString();
+
+			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+			hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+			try {
+				BitMatrix bitMatrix = new MultiFormatWriter().encode(content,
+						BarcodeFormat.QR_CODE, length, length, hints);
+				bm = getMatrixBitmap(bitMatrix, length);
+
+				iv.setImageBitmap(bm);
+			} catch (WriterException e) {
+				e.printStackTrace();
+			}
 		}
+		super.onWindowFocusChanged(hasFocus);
 	}
 
 	private Bitmap getMatrixBitmap(BitMatrix bitMatrix, int length) {
@@ -85,9 +95,33 @@ public class AuthorizeActivity extends Activity {
 
 		Account acc = accs.get(0);
 
-		String result = acc.getAccount() + "," + acc.getPassword() + ","
-				+ ManagerBindActivity.REGISTER_CODE;
+		String result = "!@#$" + acc.getAccount() + ",%^&*" + acc.getPassword()
+				+ ",()_+" + ManagerBindActivity.REGISTER_CODE;
+		byte[] buf = result.getBytes();
+		for (int i = 0; i < buf.length; i++) {
+			buf[i] ^= i + 0x40;
+		}
+		String encode = new String(buf);
+
+		buf = encode.getBytes();
+		for (int i = 0; i < buf.length; i++) {
+			buf[i] ^= i + 0x40;
+		}
+		result = new String(buf);
+
 		Log.e(TAG, "二维码信息：" + result);
+		Log.e(TAG, "加密：" + encode);
+		Log.e(TAG, "解密：" + result);
+
 		return result;
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (bm != null && !bm.isRecycled()) {
+			bm.recycle();
+			bm = null;
+		}
 	}
 }

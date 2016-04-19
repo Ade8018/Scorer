@@ -42,17 +42,23 @@
         </activity>
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.QueryActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.AuthorizeActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-        <!--
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="gd.zh.gamer.scorer.ui.activity.QueryResultActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!--
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.ConditionActivity"
             android:screenOrientation="portrait" >
@@ -63,10 +69,6 @@
         </activity>
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.TestFuncActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="gd.zh.gamer.scorer.ui.activity.QueryResultActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

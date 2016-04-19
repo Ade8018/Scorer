@@ -50,13 +50,13 @@ public class ManagerBindActivity extends Activity implements OnClickListener {
 
 	private void onRegister() {
 		String account = etAccount.getText().toString();
-		if (isValidAccountOrPwd(account)) {
-			ToastUtil.shortToast(this, "请输入不少于4位的账号(数字、字母和下划线组合)");
+		if (!isValidAccountOrPwd(account)) {
+			ToastUtil.shortToast(this, "请正确输入不少于4位的账号(数字、字母和下划线组合)");
 			return;
 		}
 		String pwd = etPwd.getText().toString();
-		if (isValidAccountOrPwd(pwd)) {
-			ToastUtil.shortToast(this, "请输入不少于4位的密码(数字、字母和下划线组合)");
+		if (!isValidAccountOrPwd(pwd)) {
+			ToastUtil.shortToast(this, "请正确输入不少于4位的密码(数字、字母和下划线组合)");
 			return;
 		}
 		String regCode = etRegCode.getText().toString();
