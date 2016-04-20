@@ -6,22 +6,15 @@ import gd.zh.gamer.scorer.db.AccountDao;
 import gd.zh.gamer.scorer.db.DaoMaster;
 import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.util.L;
+import gd.zh.gamer.scorer.util.QrCodeUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 
 public class AuthorizeActivity extends Activity {
 	public static final String TAG = "AuthorizeActivity";
@@ -39,46 +32,17 @@ public class AuthorizeActivity extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		Log.e(TAG, "onWindowFocusChanged " + hasFocus);
+		L.e(TAG, "onWindowFocusChanged " + hasFocus);
 		if (hasFocus) {
-
 			int length = iv.getWidth();
 
 			String content = getAuthString();
 
-			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
-			hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-			try {
-				BitMatrix bitMatrix = new MultiFormatWriter().encode(content,
-						BarcodeFormat.QR_CODE, length, length, hints);
-				bm = getMatrixBitmap(bitMatrix, length);
+			bm = QrCodeUtil.str2QrCodeBitmap(content, length);
 
-				iv.setImageBitmap(bm);
-			} catch (WriterException e) {
-				e.printStackTrace();
-			}
+			iv.setImageBitmap(bm);
 		}
 		super.onWindowFocusChanged(hasFocus);
-	}
-
-	private Bitmap getMatrixBitmap(BitMatrix bitMatrix, int length) {
-		int[] pixels = new int[length * length];
-		// 下面这里按照二维码的算法，逐个生成二维码的图片，
-		// 两个for循环是图片横列扫描的结果
-		for (int y = 0; y < length; y++) {
-			for (int x = 0; x < length; x++) {
-				if (bitMatrix.get(x, y)) {
-					pixels[y * length + x] = 0xff000000;
-				} else {
-					pixels[y * length + x] = 0xffffffff;
-				}
-			}
-		}
-		// 生成二维码图片的格式，使用ARGB_8888
-		Bitmap bitmap = Bitmap.createBitmap(length, length,
-				Bitmap.Config.ARGB_8888);
-		bitmap.setPixels(pixels, 0, length, 0, 0, length, length);
-		return bitmap;
 	}
 
 	private String getAuthString() {
@@ -95,23 +59,16 @@ public class AuthorizeActivity extends Activity {
 
 		Account acc = accs.get(0);
 
-		String result = "!" + acc.getAccount() + ",@" + acc.getPassword() + ",#"
-				+ ManagerBindActivity.REGISTER_CODE;
-		byte[] buf = result.getBytes();
-		for (int i = 0; i < buf.length; i++) {
-			buf[i] ^= i + 0x40;
-		}
-		String encode = new String(buf);
+		String result = "!" + acc.getAccount() + ",@" + acc.getPassword()
+				+ ",#" + ManagerBindActivity.REGISTER_CODE;
+		L.e(TAG, "二维码信息：" + result);
 
-		buf = encode.getBytes();
-		for (int i = 0; i < buf.length; i++) {
-			buf[i] ^= i + 0x40;
-		}
-		result = new String(buf);
+		String encode = QrCodeUtil.authEncode(result);
 
-		Log.e(TAG, "二维码信息：" + result);
-		Log.e(TAG, "加密：" + encode);
-		Log.e(TAG, "解密：" + result);
+		result = QrCodeUtil.authEncode(result);
+
+		L.e(TAG, "加密：" + encode);
+		L.e(TAG, "解密：" + result);
 
 		return encode;
 	}
