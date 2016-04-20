@@ -31,8 +31,9 @@ public class AuthorizeActivity extends Activity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		L.e(TAG, "onWindowFocusChanged " + hasFocus);
 		if (hasFocus) {
-			Account acc = DaoUtil.getCurrentManager();
-			if (acc == null) {// there must be a manager to auth ...
+			Account acc = DaoUtil.getCurrentAccount();
+			if (acc == null || !Account.isManager(acc)) {
+				// there must be a manager to auth ...
 				throw new RuntimeException();
 			}
 			tv.setText("当前管理员账号：" + acc.getAccount());

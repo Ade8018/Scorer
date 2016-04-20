@@ -32,22 +32,20 @@ public class DaoUtil {
 	}
 
 	/**
-	 * get current login manager
+	 * get current login account
 	 * 
-	 * @return null if there is no one
+	 * @return null if nobody
 	 */
-	public static Account getCurrentManager() {
+	public static Account getCurrentAccount() {
 		DaoMaster dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();
 		AccountDao ad = ds.getAccountDao();
 
-		List<Account> accs = ad.queryBuilder()
-				.where(AccountDao.Properties.Type.eq(Account.TYPE_MANAGER))
-				.list();
+		List<Account> accs = ad.loadAll();
 		if (accs == null || accs.size() == 0) {
 			return null;
 		}
-		if (accs.size() > 1) {// count of manager shouldnt greater than 1
+		if (accs.size() > 1) {// count of account shouldnt be greater than 1
 			throw new RuntimeException();
 		}
 

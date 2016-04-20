@@ -63,6 +63,7 @@
         </activity>
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.ScanResultActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <!--

@@ -1,13 +1,13 @@
 package gd.zh.gamer.scorer.ui.activity;
 
-import gd.zh.gamer.scorer.App;
+import gd.zh.gamer.scorer.R;
 import gd.zh.gamer.scorer.db.AccountDao;
-import gd.zh.gamer.scorer.db.DaoMaster;
-import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.decode.QrDecodeStr;
 import gd.zh.gamer.scorer.decode.QrPrinterBase;
 import gd.zh.gamer.scorer.decode.QrPrinterValueTicket;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.util.DaoUtil;
+import gd.zh.gamer.scorer.util.QrCodeUtil;
 import gd.zh.gamer.scorer.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -17,57 +17,69 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class ScanResultActivity extends Activity {
+public class ScanResultActivity extends Activity implements OnClickListener {
 	public static final String INTENT_EXTRA_KEY_SCAN_RESULT = "scan_result";
 	private Account account;
 	private String scanText;
 	private AccountDao accountDao;
 	private QrDecodeStr decoder;
+	private TextView tv;
+	private Button btn2Scan;
+	private Button btn2Menu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_scan_result);
+
+		getResultAndCheck();
+
+		initViews();
 
 		decoder = QrDecodeStr.getInstance();
 
-		DaoMaster dm = new DaoMaster(App.db);
-		DaoSession ds = dm.newSession();
-		accountDao = ds.getAccountDao();
-		List<Account> accs = accountDao.loadAll();
-		if (accs != null && accs.size() == 1) {
-			account = accs.get(0);
+		account = DaoUtil.getCurrentAccount();
+
+		if (!Account.isLogined(account)) {
+			if (!onAuthOperator())
+				print("未知的二维码");
+			return;
 		}
 
+		if (Account.isManager(account) && onPrinter()) {
+			return;
+		}
+
+		if (!onTicket()) {
+			print("未知的二维码");
+		}
+	}
+
+	private void getResultAndCheck() {
 		scanText = getIntent().getStringExtra(INTENT_EXTRA_KEY_SCAN_RESULT);
 		if (TextUtils.isEmpty(scanText)) {
 			ToastUtil.shortToast(this, "扫描出错，请重试");
 			finish();
 			return;
 		}
+	}
 
-		if (!isLogined(account)) {
-			if (!onAuthOperator())
-				ToastUtil.shortToast(this, "无法识别二维码");
-			finish();
-			return;
-		}
-		if (isManager(account) && onPrinter()) {
-			return;
-		}
-		if (!onTicket()) {
-			ToastUtil.shortToast(this, "未知的二维码");
-			finish();
-		}
+	private void initViews() {
+		tv = (TextView) findViewById(R.id.tv_scan_result);
+		btn2Menu = (Button) findViewById(R.id.btn_scan_result_to_menu);
+		btn2Menu.setOnClickListener(this);
+		btn2Scan = (Button) findViewById(R.id.btn_scan_result_to_scan);
+		btn2Scan.setOnClickListener(this);
 	}
 
 	private boolean onAuthOperator() {
 		// account/password/printer sns
-		byte[] buf = scanText.getBytes();
-		for (int i = 0; i < buf.length; i++) {
-			buf[i] ^= i + 0x40;
-		}
-		String result = new String(buf);
+		String result = QrCodeUtil.authEncode(scanText);
 		String[] arr = result.split(",");
 		if (arr.length < 3) {
 			return false;
@@ -89,43 +101,32 @@ public class ScanResultActivity extends Activity {
 			pns.add(arr[i]);
 		}
 
-		if (!ManagerBindActivity.REGISTER_CODE.equals(regCode)) {
-			// ToastUtil.shortToast(this, "注册操作员出错，注册码错误");
+		if (!isRightRegisterCode(regCode)) {
 			return false;
 		}
-		if (!isValidAccountOrPwd(acc) || !isValidAccountOrPwd(pwd)) {
-			// ToastUtil.shortToast(this, "注册操作员出错，非法账号或密码");
+		if (!Account.isValidAccountOrPwd(acc)
+				|| !Account.isValidAccountOrPwd(pwd)) {
 			return false;
 		}
 
 		Account a = new Account(null, acc, pwd, Account.TYPE_OPERATOR);
 		long insertResult = accountDao.insert(a);
-		if (insertResult > 0) {
-			ToastUtil.shortToast(this, "注册成功!");
-			savePrinter(pns);
-
-			Intent intent = new Intent(this, RegisterActivity.class);
-			startActivity(intent);
-			finish();
+		if (insertResult > 0 && savePrinters(pns)) {
+			print("注册成功!");
+			btn2Menu.setVisibility(View.VISIBLE);
 		} else {
-			ToastUtil.shortToast(this, "注册失败，请重试");
-			finish();
+			print("注册失败，请重试!");
 		}
 		return true;
 	}
 
-	private void savePrinter(List<String> pns) {
-		// TODO save printer
+	private boolean isRightRegisterCode(String regCode) {
+		return ManagerBindActivity.REGISTER_CODE.equals(regCode);
 	}
 
-	public static boolean isValidAccountOrPwd(String text) {
-		if (TextUtils.isEmpty(text) || text.length() < 4) {
-			return false;
-		}
-		if (!text.matches("[A-Za-z0-9_]+")) {
-			return false;
-		}
-		return true;
+	private boolean savePrinters(List<String> pns) {
+		// TODO save printers
+		return false;
 	}
 
 	private boolean onPrinter() {
@@ -133,7 +134,7 @@ public class ScanResultActivity extends Activity {
 		if (pb == null)
 			return false;
 
-		ToastUtil.longToast(this, "扫描到打印机：" + pb.toString() + ",打印机未保存");
+		print("识别到打印机：" + pb.toString() + ",打印机未保存");
 		// TODO
 
 		return true;
@@ -144,16 +145,25 @@ public class ScanResultActivity extends Activity {
 		if (ticket == null) {
 			return false;
 		}
-		ToastUtil.longToast(this, "扫描到兑换券：" + ticket.toString() + ",兑换券未保存");
+		print("识别到兑换券：" + ticket.toString() + ",兑换券未保存");
 		// TODO
 		return true;
 	}
 
-	public static boolean isLogined(Account account) {
-		return account != null;
+	private void print(String text) {
+		tv.setText(text);
 	}
 
-	public static boolean isManager(Account account) {
-		return isLogined(account) && account.getType() == Account.TYPE_MANAGER;
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_scan_result_to_menu:
+			Intent intent = new Intent(this, RegisterActivity.class);
+			startActivity(intent);
+		case R.id.btn_scan_result_to_scan:
+			finish();
+			break;
+		}
 	}
+
 }
