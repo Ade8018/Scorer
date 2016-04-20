@@ -1,11 +1,17 @@
 package gd.zh.gamer.scorer.ui.activity;
 
+import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
 import gd.zh.gamer.scorer.db.AccountDao;
+import gd.zh.gamer.scorer.db.DaoMaster;
+import gd.zh.gamer.scorer.db.DaoSession;
+import gd.zh.gamer.scorer.db.PrinterDao;
 import gd.zh.gamer.scorer.decode.QrDecodeStr;
 import gd.zh.gamer.scorer.decode.QrPrinterBase;
 import gd.zh.gamer.scorer.decode.QrPrinterValueTicket;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.entity.Printer;
+import gd.zh.gamer.scorer.entity.Record;
 import gd.zh.gamer.scorer.util.DaoUtil;
 import gd.zh.gamer.scorer.util.QrCodeUtil;
 import gd.zh.gamer.scorer.util.ToastUtil;
@@ -145,9 +151,36 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 		if (ticket == null) {
 			return false;
 		}
-		print("识别到兑换券：" + ticket.toString() + ",兑换券未保存");
+
+		print("识别到积分券：" + ticket.toString());
+
+		long pid = getPrinterId(ticket.getQrPrinterSn());
+		if (pid < 1) {
+			return false;
+		}
+
+		Record rec = new Record();
+		rec.setExc_time(System.currentTimeMillis());
+		// ticket.getQrPrinterTime()
+		// rec.setPrint_time();
+		rec.setPrinter_id(pid);
+
 		// TODO
 		return true;
+	}
+
+	private long getPrinterId(String sn) {
+		if (TextUtils.isEmpty(sn))
+			throw new IllegalArgumentException();
+		DaoMaster dm = new DaoMaster(App.db);
+		DaoSession ds = dm.newSession();
+		PrinterDao pd = ds.getPrinterDao();
+		List<Printer> printers = pd.queryBuilder()
+				.where(PrinterDao.Properties.Sn.eq(sn)).list();
+		int count = printers.size();
+		if (count > 1 || count < 0)
+			throw new RuntimeException();
+		return printers.get(0).getId();
 	}
 
 	private void print(String text) {
