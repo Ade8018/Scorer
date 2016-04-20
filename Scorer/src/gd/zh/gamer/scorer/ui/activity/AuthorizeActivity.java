@@ -95,8 +95,8 @@ public class AuthorizeActivity extends Activity {
 
 		Account acc = accs.get(0);
 
-		String result = "!@#$" + acc.getAccount() + ",%^&*" + acc.getPassword()
-				+ ",()_+" + ManagerBindActivity.REGISTER_CODE;
+		String result = "!" + acc.getAccount() + ",@" + acc.getPassword() + ",#"
+				+ ManagerBindActivity.REGISTER_CODE;
 		byte[] buf = result.getBytes();
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] ^= i + 0x40;
@@ -113,7 +113,7 @@ public class AuthorizeActivity extends Activity {
 		Log.e(TAG, "加密：" + encode);
 		Log.e(TAG, "解密：" + result);
 
-		return result;
+		return encode;
 	}
 
 	@Override

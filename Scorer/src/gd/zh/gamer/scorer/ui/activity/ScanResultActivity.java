@@ -47,7 +47,9 @@ public class ScanResultActivity extends Activity {
 		}
 
 		if (!isLogined(account)) {
-			onAuthOperator();
+			if (!onAuthOperator())
+				ToastUtil.shortToast(this, "无法识别二维码");
+			finish();
 			return;
 		}
 		if (isManager(account) && onPrinter()) {
@@ -59,7 +61,7 @@ public class ScanResultActivity extends Activity {
 		}
 	}
 
-	private void onAuthOperator() {
+	private boolean onAuthOperator() {
 		// account/password/printer sns
 		byte[] buf = scanText.getBytes();
 		for (int i = 0; i < buf.length; i++) {
@@ -67,17 +69,20 @@ public class ScanResultActivity extends Activity {
 		}
 		String result = new String(buf);
 		String[] arr = result.split(",");
+		if (arr.length < 3) {
+			return false;
+		}
 		String acc = null;
-		if (arr[0].startsWith("!@#$")) {
-			acc = arr[0].substring(4);
+		if (arr[0].startsWith("!")) {
+			acc = arr[0].substring(1);
 		}
 		String pwd = null;
-		if (arr[1].startsWith("%^&*")) {
-			pwd = arr[1].substring(4);
+		if (arr[1].startsWith("@")) {
+			pwd = arr[1].substring(1);
 		}
 		String regCode = null;
-		if (arr[1].startsWith("()_+")) {
-			regCode = arr[2].substring(4);
+		if (arr[2].startsWith("#")) {
+			regCode = arr[2].substring(1);
 		}
 		List<String> pns = new ArrayList<String>();
 		for (int i = 3; i < arr.length; i++) {
@@ -85,14 +90,12 @@ public class ScanResultActivity extends Activity {
 		}
 
 		if (!ManagerBindActivity.REGISTER_CODE.equals(regCode)) {
-			ToastUtil.shortToast(this, "注册操作员出错，注册码错误");
-			finish();
-			return;
+			// ToastUtil.shortToast(this, "注册操作员出错，注册码错误");
+			return false;
 		}
 		if (!isValidAccountOrPwd(acc) || !isValidAccountOrPwd(pwd)) {
-			ToastUtil.shortToast(this, "注册操作员出错，非法账号或密码");
-			finish();
-			return;
+			// ToastUtil.shortToast(this, "注册操作员出错，非法账号或密码");
+			return false;
 		}
 
 		Account a = new Account(null, acc, pwd, Account.TYPE_OPERATOR);
@@ -104,12 +107,11 @@ public class ScanResultActivity extends Activity {
 			Intent intent = new Intent(this, RegisterActivity.class);
 			startActivity(intent);
 			finish();
-			return;
 		} else {
 			ToastUtil.shortToast(this, "注册失败，请重试");
 			finish();
-			return;
 		}
+		return true;
 	}
 
 	private void savePrinter(List<String> pns) {
@@ -131,7 +133,7 @@ public class ScanResultActivity extends Activity {
 		if (pb == null)
 			return false;
 
-		ToastUtil.shortToast(this, "扫描到打印机：" + pb.toString() + ",打印机未保存");
+		ToastUtil.longToast(this, "扫描到打印机：" + pb.toString() + ",打印机未保存");
 		// TODO
 
 		return true;
@@ -142,7 +144,7 @@ public class ScanResultActivity extends Activity {
 		if (ticket == null) {
 			return false;
 		}
-		ToastUtil.shortToast(this, "扫描到兑换券：" + ticket.toString() + ",兑换券未保存");
+		ToastUtil.longToast(this, "扫描到兑换券：" + ticket.toString() + ",兑换券未保存");
 		// TODO
 		return true;
 	}

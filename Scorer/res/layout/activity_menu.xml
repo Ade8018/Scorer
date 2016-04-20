@@ -4,23 +4,62 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btn_menu_scan"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="扫一扫" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="I&apos;m LOGO"
+        android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/btn_menu_history"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="历史记录" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/btn_menu_authorize"
+        <Button
+            android:id="@+id/btn_menu_scan"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_bg_btn_menu"
+            android:drawableTop="@drawable/scan"
+            android:padding="10dp"
+            android:text="扫一扫" />
+
+        <Button
+            android:id="@+id/btn_menu_history"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_bg_btn_menu"
+            android:drawableTop="@drawable/query"
+            android:padding="10dp"
+            android:text="历史记录" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="授权"
-        android:visibility="gone" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_menu_authorize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_bg_btn_menu"
+            android:drawableTop="@drawable/auth"
+            android:padding="10dp"
+            android:text="授权"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>
