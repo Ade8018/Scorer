@@ -18,7 +18,7 @@ public class QrCodeUtil {
 		}
 		byte[] buf = src.getBytes();
 		for (int i = 0; i < buf.length; i++) {
-			buf[i] ^= i + 0x40;
+			buf[i] ^= (i + 0x40);
 		}
 		return new String(buf);
 	}

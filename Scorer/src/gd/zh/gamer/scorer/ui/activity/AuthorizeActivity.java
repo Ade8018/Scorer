@@ -1,24 +1,21 @@
 package gd.zh.gamer.scorer.ui.activity;
 
-import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
 import gd.zh.gamer.scorer.db.AccountDao;
-import gd.zh.gamer.scorer.db.DaoMaster;
-import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.util.DaoUtil;
 import gd.zh.gamer.scorer.util.L;
 import gd.zh.gamer.scorer.util.QrCodeUtil;
-
-import java.util.List;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class AuthorizeActivity extends Activity {
 	public static final String TAG = "AuthorizeActivity";
 	private ImageView iv;
+	private TextView tv;
 	private Bitmap bm;
 
 	@Override
@@ -27,17 +24,22 @@ public class AuthorizeActivity extends Activity {
 		setContentView(R.layout.activity_authorize);
 
 		iv = (ImageView) findViewById(R.id.iv_authorize);
-
+		tv = (TextView) findViewById(R.id.tv_authorize);
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		L.e(TAG, "onWindowFocusChanged " + hasFocus);
 		if (hasFocus) {
+			Account acc = DaoUtil.getCurrentManager();
+			if (acc == null) {// there must be a manager to auth ...
+				throw new RuntimeException();
+			}
+			tv.setText("当前管理员账号：" + acc.getAccount());
+
+			String content = getAuthString(acc);
+
 			int length = iv.getWidth();
-
-			String content = getAuthString();
-
 			bm = QrCodeUtil.str2QrCodeBitmap(content, length);
 
 			iv.setImageBitmap(bm);
@@ -45,19 +47,7 @@ public class AuthorizeActivity extends Activity {
 		super.onWindowFocusChanged(hasFocus);
 	}
 
-	private String getAuthString() {
-		DaoMaster dm = new DaoMaster(App.db);
-		DaoSession ds = dm.newSession();
-		AccountDao ad = ds.getAccountDao();
-
-		List<Account> accs = ad.queryBuilder()
-				.where(AccountDao.Properties.Type.eq(Account.TYPE_MANAGER))
-				.list();
-		if (accs == null || accs.size() != 1) {
-			throw new RuntimeException();
-		}
-
-		Account acc = accs.get(0);
+	private String getAuthString(Account acc) {
 
 		String result = "!" + acc.getAccount() + ",@" + acc.getPassword()
 				+ ",#" + ManagerBindActivity.REGISTER_CODE;
@@ -65,7 +55,7 @@ public class AuthorizeActivity extends Activity {
 
 		String encode = QrCodeUtil.authEncode(result);
 
-		result = QrCodeUtil.authEncode(result);
+		result = QrCodeUtil.authEncode(encode);
 
 		L.e(TAG, "加密：" + encode);
 		L.e(TAG, "解密：" + result);
