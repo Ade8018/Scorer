@@ -24,9 +24,17 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 	private long mPrintTimeEnd;
 	private long mExcTimeStart;
 	private long mExcTimeEnd;
+	private long printerIds[];
 	private RecordDao mRd;
 
-	public ResultAdapter(long ptStart, long ptEnd, long etStart, long etEnd) {
+	public ResultAdapter(long ptStart, long ptEnd, long etStart, long etEnd,
+			long ids[]) {
+		printerIds = ids;
+		mPrintTimeEnd = ptEnd;
+		mPrintTimeStart = ptStart;
+		mExcTimeEnd = etEnd;
+		mExcTimeStart = etStart;
+
 		DaoMaster dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();
 		mRd = ds.getRecordDao();
@@ -52,13 +60,19 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_queryresult, parent, false);
+			convertView = LayoutInflater.from(parent.getContext()).inflate(
+					R.layout.item_queryresult, parent, false);
 			vh = new ViewHolder();
-			vh.tvId = (TextView) convertView.findViewById(R.id.tv_queryresult_id);
-			vh.tvPrinter = (TextView) convertView.findViewById(R.id.tv_queryresult_printersn);
-			vh.tvScore = (TextView) convertView.findViewById(R.id.tv_queryresult_score);
-			vh.tvPrintTime = (TextView) convertView.findViewById(R.id.tv_queryresult_printtime);
-			vh.tvExcTime = (TextView) convertView.findViewById(R.id.tv_queryresult_exctime);
+			vh.tvId = (TextView) convertView
+					.findViewById(R.id.tv_queryresult_id);
+			vh.tvPrinter = (TextView) convertView
+					.findViewById(R.id.tv_queryresult_printersn);
+			vh.tvScore = (TextView) convertView
+					.findViewById(R.id.tv_queryresult_score);
+			vh.tvPrintTime = (TextView) convertView
+					.findViewById(R.id.tv_queryresult_printtime);
+			vh.tvExcTime = (TextView) convertView
+					.findViewById(R.id.tv_queryresult_exctime);
 			vh.tvId.setOnClickListener(this);
 			vh.tvPrinter.setOnClickListener(this);
 			vh.tvScore.setOnClickListener(this);
@@ -83,7 +97,7 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 			position--;
 			Record r = mDatas.get(position);
 			vh.tvId.setText(r.getId() + "");
-			vh.tvPrinter.setText(String.valueOf(r.getPrinter_id()));
+			vh.tvPrinter.setText(r.getPrinter().getNickname());
 			vh.tvScore.setText(r.getScore() + "");
 			vh.tvPrintTime.setText(r.getPrint_time() + "");
 			vh.tvExcTime.setText(r.getExc_time() + "");
@@ -117,40 +131,12 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 		mDatas.clear();
 		mDatas.addAll(getBaseBuilder().orderAsc(Properties.Score).list());
 		notifyDataSetChanged();
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 
 	private QueryBuilder<Record> getBaseBuilder() {
 		QueryBuilder<Record> qb = mRd.queryBuilder();
+		qb.where(RecordDao.Properties.Printer_id.in(printerIds));
+
 		if (mPrintTimeStart > 0) {
 			qb.where(Properties.Print_time.gt(mPrintTimeStart));
 		}
@@ -163,6 +149,7 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 		if (mExcTimeEnd > 0) {
 			qb.where(Properties.Exc_time.lt(mExcTimeEnd));
 		}
+
 		return qb;
 	}
 }

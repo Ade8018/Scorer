@@ -1,9 +1,10 @@
 package gd.zh.gamer.scorer.ui.dialog;
 
+import gd.zh.gamer.scorer.R;
+
 import java.util.Calendar;
 import java.util.Date;
 
-import gd.zh.gamer.scorer.R;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;

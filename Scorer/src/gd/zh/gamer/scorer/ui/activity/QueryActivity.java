@@ -1,16 +1,25 @@
 package gd.zh.gamer.scorer.ui.activity;
 
+import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
+import gd.zh.gamer.scorer.db.DaoMaster;
+import gd.zh.gamer.scorer.db.DaoSession;
+import gd.zh.gamer.scorer.db.PrinterDao;
+import gd.zh.gamer.scorer.entity.Printer;
 import gd.zh.gamer.scorer.ui.dialog.PickTimeWindow;
 import gd.zh.gamer.scorer.ui.dialog.PickTimeWindow.OnTimeSaveListener;
 import gd.zh.gamer.scorer.util.ActionBarUtil;
+import gd.zh.gamer.scorer.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +27,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class QueryActivity extends Activity implements OnClickListener, OnTimeSaveListener {
+public class QueryActivity extends Activity implements OnClickListener,
+		OnTimeSaveListener {
 	private TextView mTvPrintStartTime;
 	private TextView mTvPrintEndTime;
 	private TextView mTvExcStartTime;
@@ -33,7 +43,9 @@ public class QueryActivity extends Activity implements OnClickListener, OnTimeSa
 	private long mPrintEndTime;
 	private long mExcStartTime;
 	private long mExcEndTime;
-	private ArrayList<String> mPrinters = new ArrayList<String>();
+	private List<Printer> printers;
+	private List<Printer> checkedPrinters;
+	private List<Printer> tempCheckedPrinters;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +102,7 @@ public class QueryActivity extends Activity implements OnClickListener, OnTimeSa
 			mPtExcEnd.show();
 			break;
 		case R.id.tv_condition_printer:
+			onPrinter();
 			break;
 		case R.id.btn_condition_query:
 			onQuery();
@@ -97,20 +110,117 @@ public class QueryActivity extends Activity implements OnClickListener, OnTimeSa
 		}
 	}
 
+	private void onPrinter() {
+		if (printers == null) {
+			DaoMaster dm = new DaoMaster(App.db);
+			DaoSession ds = dm.newSession();
+			PrinterDao pd = ds.getPrinterDao();
+			printers = pd.loadAll();
+		}
+		if (printers == null || printers.size() < 1) {
+			ToastUtil.shortToast(this, "没有打印机");
+			return;
+		}
+		String[] items = new String[printers.size()];
+		boolean checkedItems[] = new boolean[printers.size()];
+
+		if (checkedPrinters != null && checkedPrinters.size() > 0) {
+			for (int i = 0; i < printers.size(); i++) {
+				if (checkedPrinters.contains(printers.get(i))) {
+					checkedItems[i] = true;
+				}
+			}
+		}
+
+		for (int i = 0; i < items.length; i++) {
+			items[i] = printers.get(i).getNickname();
+		}
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setMultiChoiceItems(items, checkedItems,
+				new OnMultiChoiceClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which,
+							boolean isChecked) {
+						if (tempCheckedPrinters == null) {
+							tempCheckedPrinters = new ArrayList<Printer>();
+						}
+						if (isChecked) {
+							tempCheckedPrinters.add(printers.get(which));
+						} else {
+							tempCheckedPrinters.remove(printers.get(which));
+						}
+					}
+				});
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (checkedPrinters == null) {
+					checkedPrinters = new ArrayList<Printer>();
+				}
+				if (tempCheckedPrinters != null) {
+					checkedPrinters.addAll(tempCheckedPrinters);
+				}
+				String printerStr = "";
+				if (checkedPrinters != null && checkedPrinters.size() > 0) {
+					for (int i = 0; i < checkedPrinters.size(); i++) {
+						printerStr += checkedPrinters.get(i);
+						if (i < checkedPrinters.size() - 1) {
+							printerStr += ",";
+						}
+					}
+				}
+				mTvPrinter.setText(printerStr);
+				dialog.dismiss();
+			}
+		});
+	}
+
 	private void onQuery() {
+		if (mPrintEndTime < mPrintStartTime || mExcEndTime < mExcStartTime) {
+			ToastUtil.shortToast(this, "结束时间不能大于起始时间！");
+			return;
+		}
+
+		if (checkedPrinters == null || checkedPrinters.size() < 1) {
+			ToastUtil.shortToast(this, "请选择打印机");
+			return;
+		}
+
+		long[] ids = new long[checkedPrinters.size()];
+		for (int i = 0; i < ids.length; i++) {
+			ids[i] = checkedPrinters.get(i).getId();
+		}
+
 		Intent intent = new Intent(this, QueryResultActivity.class);
-		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_PRINT_START_TIME, mPrintStartTime);
-		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_PRINT_END_TIME, mPrintEndTime);
-		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_EXC_START_TIME, mExcStartTime);
-		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_EXC_END_TIME, mExcEndTime);
+		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_PRINTER_IDS, ids);
+		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_PRINT_START_TIME,
+				mPrintStartTime);
+		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_PRINT_END_TIME,
+				mPrintEndTime);
+		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_EXC_START_TIME,
+				mExcStartTime);
+		intent.putExtra(QueryResultActivity.INTENT_EXTRA_KEY_EXC_END_TIME,
+				mExcEndTime);
+
 		startActivity(intent);
 	}
 
 	@Override
 	public void onTimeSaved(PickTimeWindow ptw) {
 		Calendar c = ptw.getTime();
-		String timeStr = c.get(Calendar.YEAR) + getDoubleString(c.get(Calendar.MONTH) + 1) + getDoubleString(c.get(Calendar.DAY_OF_MONTH)) + getDoubleString(c.get(Calendar.HOUR_OF_DAY))
-				+ getDoubleString(c.get(Calendar.MINUTE)) + getDoubleString(c.get(Calendar.SECOND));
+		String timeStr = c.get(Calendar.YEAR)
+				+ getDoubleString(c.get(Calendar.MONTH) + 1)
+				+ getDoubleString(c.get(Calendar.DAY_OF_MONTH))
+				+ getDoubleString(c.get(Calendar.HOUR_OF_DAY))
+				+ getDoubleString(c.get(Calendar.MINUTE))
+				+ getDoubleString(c.get(Calendar.SECOND));
 		if (mPtPrintStart == ptw) {
 			mPrintStartTime = Long.parseLong(timeStr);
 			setTime(mTvPrintStartTime, ptw.getTime());
@@ -127,8 +237,11 @@ public class QueryActivity extends Activity implements OnClickListener, OnTimeSa
 	}
 
 	private void setTime(TextView tv, Calendar time) {
-		tv.setText(String.format("%s年%s月%s日  %s:%s:%s", time.get(Calendar.YEAR), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH), time.get(Calendar.HOUR_OF_DAY),
-				time.get(Calendar.MINUTE), time.get(Calendar.SECOND)));
+		tv.setText(String.format("%s年%s月%s日  %s:%s:%s",
+				time.get(Calendar.YEAR), time.get(Calendar.MONTH) + 1,
+				time.get(Calendar.DAY_OF_MONTH),
+				time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),
+				time.get(Calendar.SECOND)));
 	}
 
 	private String getDoubleString(int i) {

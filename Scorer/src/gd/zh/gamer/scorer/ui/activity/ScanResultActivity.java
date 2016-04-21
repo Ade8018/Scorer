@@ -166,6 +166,7 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 	}
 
 	private boolean onPrinter() {
+		// TODO 需要判断打印机的cid，未实现
 		QrPrinterBase pb = decoder.decodeQrPrinterCode(scanText);
 		if (pb == null)
 			return false;
