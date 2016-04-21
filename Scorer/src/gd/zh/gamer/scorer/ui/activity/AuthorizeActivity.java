@@ -1,11 +1,18 @@
 package gd.zh.gamer.scorer.ui.activity;
 
+import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
-import gd.zh.gamer.scorer.db.AccountDao;
+import gd.zh.gamer.scorer.db.DaoMaster;
+import gd.zh.gamer.scorer.db.DaoSession;
+import gd.zh.gamer.scorer.db.PrinterDao;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.entity.Printer;
 import gd.zh.gamer.scorer.util.DaoUtil;
 import gd.zh.gamer.scorer.util.L;
 import gd.zh.gamer.scorer.util.QrCodeUtil;
+
+import java.util.List;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -52,6 +59,19 @@ public class AuthorizeActivity extends Activity {
 
 		String result = "!" + acc.getAccount() + ",@" + acc.getPassword()
 				+ ",#" + ManagerBindActivity.REGISTER_CODE;
+
+		DaoMaster dm = new DaoMaster(App.db);
+		DaoSession ds = dm.newSession();
+		PrinterDao pd = ds.getPrinterDao();
+		List<Printer> ps = pd.loadAll();
+		if (ps != null && ps.size() > 0) {
+			int size = ps.size();
+			for (int i = 0; i < size; i++) {
+				result += ("," + ps.get(i).getNickname() + "|" + ps.get(i)
+						.getSn());
+			}
+		}
+
 		L.e(TAG, "二维码信息：" + result);
 
 		String encode = QrCodeUtil.authEncode(result);

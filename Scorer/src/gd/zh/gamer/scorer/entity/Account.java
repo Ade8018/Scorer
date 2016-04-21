@@ -10,73 +10,64 @@ public class Account {
 	public static final int TYPE_MANAGER = 1;
 	public static final int TYPE_OPERATOR = 2;
 
-	private Long id;
-	/** Not-null value. */
-	private String account;
-	/** Not-null value. */
-	private String password;
-	/**
-	 * 当前使用App的用户的种类，而不是这个账号的种类
-	 */
-	private int type;
+    private Long id;
+    /** Not-null value. */
+    private String account;
+    /** Not-null value. */
+    private String password;
+    private int type;
 
-	public Account() {
-	}
+    public Account() {
+    }
 
-	public Account(Long id) {
-		this.id = id;
-	}
+    public Account(Long id) {
+        this.id = id;
+    }
 
-	public Account(Long id, String account, String password, int type) {
-		this.id = id;
-		this.account = account;
-		this.password = password;
-		this.type = type;
-	}
+    public Account(Long id, String account, String password, int type) {
+        this.id = id;
+        this.account = account;
+        this.password = password;
+        this.type = type;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/** Not-null value. */
-	public String getAccount() {
-		return account;
-	}
+    /** Not-null value. */
+    public String getAccount() {
+        return account;
+    }
 
-	/**
-	 * Not-null value; ensure this value is available before it is saved to the
-	 * database.
-	 */
-	public void setAccount(String account) {
-		this.account = account;
-	}
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
-	/** Not-null value. */
-	public String getPassword() {
-		return password;
-	}
+    /** Not-null value. */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * Not-null value; ensure this value is available before it is saved to the
-	 * database.
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public int getType() {
-		return type;
-	}
+    public int getType() {
+        return type;
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public static boolean isLogined(Account account) {
+    public void setType(int type) {
+        this.type = type;
+    }
+    
+    public static boolean isLogined(Account account) {
 		return account != null;
 	}
 
@@ -91,4 +82,5 @@ public class Account {
 			return false;
 		return true;
 	}
+
 }

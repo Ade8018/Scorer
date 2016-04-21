@@ -39,7 +39,7 @@ public class QrPrinterValueTicket extends QrPrinterBase {
 	public String toString() {
 		return "QrPrinterValueTicket [mValue=" + mValue + ", mAddtionValueN="
 				+ mAddtionValueN + ", mRatioX=" + mRatioX + ", mPin=" + mPin
-				+ "]";
+				+ "]" + super.toString();
 	}
 
 }

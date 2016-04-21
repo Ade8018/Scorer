@@ -1,7 +1,6 @@
 package gd.zh.gamer.scorer;
 
 import gd.zh.gamer.scorer.db.DaoMaster;
-import gd.zh.gamer.scorer.util.SpHelper;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 

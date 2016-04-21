@@ -6,7 +6,6 @@ import gd.zh.gamer.scorer.db.AccountDao;
 import gd.zh.gamer.scorer.db.DaoMaster;
 import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.entity.Account;
-import gd.zh.gamer.scorer.util.SpHelper;
 
 import java.util.List;
 

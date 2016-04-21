@@ -6,7 +6,9 @@ import android.text.TextUtils;
 
 public class SpHelper {
 	public static String SP_NAME_MAIN = "sp_name_main";
-	public static String SP_KEY_PIN = "abcqwe";
+	public static String SP_KEY_PIN = "abcq";
+	public static String SP_KEY_PRINTER_INDEX = "asdf";// 由一个字母和两位数字组成，如A00
+	public static String DEFAULT_PIN = "0000";
 	private static String sPin;
 
 	private static SharedPreferences getSp(Context context) {
@@ -35,13 +37,44 @@ public class SpHelper {
 	}
 
 	private static String getPin(Context context) {
-		return getSp(context).getString(SP_KEY_PIN, null);
+		return getSp(context).getString(SP_KEY_PIN, DEFAULT_PIN);
 	}
 
 	public static boolean isValidPin(String pin) {
 		if (TextUtils.isEmpty(pin) || pin.length() != 4)
 			return false;
 		return pin.matches("[0-9]+");
+	}
+
+	public static String getAndIncreasePrinterNickName(Context context) {
+		SharedPreferences sp = getSp(context);
+		String current = sp.getString(SP_KEY_PRINTER_INDEX, "A00");
+		char c = current.charAt(0);
+		int index = -1;
+		try {
+			index = Integer.parseInt(current.substring(1));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		if (index < 0 || index >= 100)
+			return null;
+
+		index++;
+		if (index == 100) {
+			index = 0;
+			c++;
+		}
+		String next = "" + c;
+		if (index < 10) {
+			next += ("0" + index);
+		} else {
+			next += index;
+		}
+		if (!sp.edit().putString(SP_KEY_PRINTER_INDEX, next).commit())
+			return null;
+
+		return current;
 	}
 
 }
