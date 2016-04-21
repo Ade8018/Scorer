@@ -46,6 +46,12 @@ public class SpHelper {
 		return pin.matches("[0-9]+");
 	}
 
+	/**
+	 * 生成并增加打印机代号。以下代码已测试,勿动
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static String getAndIncreasePrinterNickName(Context context) {
 		SharedPreferences sp = getSp(context);
 		String current = sp.getString(SP_KEY_PRINTER_INDEX, "A00");
