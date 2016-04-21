@@ -180,6 +180,7 @@ public class QueryActivity extends Activity implements OnClickListener,
 				dialog.dismiss();
 			}
 		});
+		builder.create().show();
 	}
 
 	private void onQuery() {
