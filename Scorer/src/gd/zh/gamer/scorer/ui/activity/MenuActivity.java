@@ -83,6 +83,6 @@ public class MenuActivity extends Activity implements OnClickListener {
 	}
 
 	private boolean isManager() {
-		return Account.TYPE_MANAGER == account.getType();
+		return Account.isManager(account);
 	}
 }

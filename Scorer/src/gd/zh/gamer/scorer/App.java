@@ -12,7 +12,6 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();
 		db = new DaoMaster.DevOpenHelper(this, "scorer.db", null).getWritableDatabase();
-		SpHelper.init(this);
 	}
 
 }

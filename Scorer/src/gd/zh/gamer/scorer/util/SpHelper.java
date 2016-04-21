@@ -2,30 +2,46 @@ package gd.zh.gamer.scorer.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 public class SpHelper {
 	public static String SP_NAME_MAIN = "sp_name_main";
-	public static String SP_KEY_LOGIN_ACCOUNT_ID = "sp_key_login_account_id";
-	private static SharedPreferences sSp;
+	public static String SP_KEY_PIN = "abcqwe";
+	private static String sPin;
 
-	public static void init(Context context) {
-		sSp = context.getSharedPreferences(SP_NAME_MAIN, Context.MODE_PRIVATE);
+	private static SharedPreferences getSp(Context context) {
+		return context.getSharedPreferences(SP_NAME_MAIN, Context.MODE_PRIVATE);
 	}
 
-	public static long getLoginAccountID() {
-		return sSp.getLong(SP_KEY_LOGIN_ACCOUNT_ID, 0);
+	public static void savePin(Context context, String pin) {
+		if (!isValidPin(pin))
+			throw new IllegalArgumentException();
+
+		if (getSp(context).edit().putString(SP_KEY_PIN, pin).commit())
+			sPin = pin;
+		else
+			ToastUtil.shortToast(context, "保存PIN码失败，请稍后再试");
 	}
 
-	public static boolean isLogin() {
-		return sSp.getLong(SP_KEY_LOGIN_ACCOUNT_ID, 0) > 0;
+	public static String getCachePin(Context context) {
+		if (sPin == null) {
+			synchronized (SpHelper.class) {
+				if (sPin == null) {
+					sPin = getPin(context);
+				}
+			}
+		}
+		return sPin;
 	}
 
-	public static void logout() {
-		sSp.edit().putLong(SP_KEY_LOGIN_ACCOUNT_ID, 0).commit();
+	private static String getPin(Context context) {
+		return getSp(context).getString(SP_KEY_PIN, null);
 	}
-	
-	public static void login(long id){
-		sSp.edit().putLong(SP_KEY_LOGIN_ACCOUNT_ID, id).commit();
+
+	public static boolean isValidPin(String pin) {
+		if (TextUtils.isEmpty(pin) || pin.length() != 4)
+			return false;
+		return pin.matches("[0-9]+");
 	}
 
 }

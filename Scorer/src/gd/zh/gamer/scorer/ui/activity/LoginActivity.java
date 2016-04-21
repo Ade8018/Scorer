@@ -52,7 +52,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		List<Account> as = ad.queryBuilder().where(AccountDao.Properties.Account.eq(acc), AccountDao.Properties.Password.eq(pwd)).list();
 		if (as != null && as.size() > 0) {
 			Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
-			SpHelper.login(as.get(0).getId());
+//			SpHelper.login(as.get(0).getId());
 			finish();
 		} else {
 			Toast.makeText(this, "登录失败，请检查账号和密码", Toast.LENGTH_SHORT).show();
