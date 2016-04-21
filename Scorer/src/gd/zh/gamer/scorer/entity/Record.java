@@ -7,10 +7,12 @@ package gd.zh.gamer.scorer.entity;
 public class Record {
 
     private Long id;
-    private int score;
+    private long score;
     private long print_time;
     private long exc_time;
-    private Long printer_id;
+    /** Not-null value. */
+    private String pin;
+    private long printer_id;
 
     public Record() {
     }
@@ -19,11 +21,12 @@ public class Record {
         this.id = id;
     }
 
-    public Record(Long id, int score, long print_time, long exc_time, Long printer_id) {
+    public Record(Long id, long score, long print_time, long exc_time, String pin, long printer_id) {
         this.id = id;
         this.score = score;
         this.print_time = print_time;
         this.exc_time = exc_time;
+        this.pin = pin;
         this.printer_id = printer_id;
     }
 
@@ -35,11 +38,11 @@ public class Record {
         this.id = id;
     }
 
-    public int getScore() {
+    public long getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(long score) {
         this.score = score;
     }
 
@@ -59,11 +62,21 @@ public class Record {
         this.exc_time = exc_time;
     }
 
-    public Long getPrinter_id() {
+    /** Not-null value. */
+    public String getPin() {
+        return pin;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    public long getPrinter_id() {
         return printer_id;
     }
 
-    public void setPrinter_id(Long printer_id) {
+    public void setPrinter_id(long printer_id) {
         this.printer_id = printer_id;
     }
 

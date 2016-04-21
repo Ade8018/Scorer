@@ -23,7 +23,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Sn = new Property(1, String.class, "sn", false, "SN");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Nickname = new Property(2, String.class, "nickname", false, "NICKNAME");
+        public final static Property Time = new Property(3, long.class, "time", false, "TIME");
     };
 
 
@@ -39,9 +40,10 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PRINTER\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"SN\" TEXT NOT NULL ," + // 1: sn
-                "\"NAME\" TEXT);"); // 2: name
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"SN\" TEXT NOT NULL UNIQUE ," + // 1: sn
+                "\"NICKNAME\" TEXT NOT NULL UNIQUE ," + // 2: nickname
+                "\"TIME\" INTEGER NOT NULL );"); // 3: time
     }
 
     /** Drops the underlying database table. */
@@ -60,11 +62,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getSn());
- 
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(3, name);
-        }
+        stmt.bindString(3, entity.getNickname());
+        stmt.bindLong(4, entity.getTime());
     }
 
     /** @inheritdoc */
@@ -79,7 +78,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         Printer entity = new Printer( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // sn
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // name
+            cursor.getString(offset + 2), // nickname
+            cursor.getLong(offset + 3) // time
         );
         return entity;
     }
@@ -89,7 +89,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
     public void readEntity(Cursor cursor, Printer entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setSn(cursor.getString(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setNickname(cursor.getString(offset + 2));
+        entity.setTime(cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */

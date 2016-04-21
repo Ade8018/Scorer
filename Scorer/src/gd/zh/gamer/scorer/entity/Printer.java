@@ -9,7 +9,9 @@ public class Printer {
     private Long id;
     /** Not-null value. */
     private String sn;
-    private String name;
+    /** Not-null value. */
+    private String nickname;
+    private long time;
 
     public Printer() {
     }
@@ -18,10 +20,11 @@ public class Printer {
         this.id = id;
     }
 
-    public Printer(Long id, String sn, String name) {
+    public Printer(Long id, String sn, String nickname, long time) {
         this.id = id;
         this.sn = sn;
-        this.name = name;
+        this.nickname = nickname;
+        this.time = time;
     }
 
     public Long getId() {
@@ -42,12 +45,22 @@ public class Printer {
         this.sn = sn;
     }
 
-    public String getName() {
-        return name;
+    /** Not-null value. */
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
 }
