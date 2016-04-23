@@ -131,6 +131,13 @@ public class QueryActivity extends Activity implements OnClickListener,
 				}
 			}
 		}
+		
+		if (tempCheckedPrinters == null) {
+			tempCheckedPrinters = new ArrayList<Printer>();
+		}else{
+			tempCheckedPrinters.clear();
+		}
+		tempCheckedPrinters.addAll(checkedPrinters);
 
 		for (int i = 0; i < items.length; i++) {
 			items[i] = printers.get(i).getNickname();
@@ -141,9 +148,6 @@ public class QueryActivity extends Activity implements OnClickListener,
 					@Override
 					public void onClick(DialogInterface dialog, int which,
 							boolean isChecked) {
-						if (tempCheckedPrinters == null) {
-							tempCheckedPrinters = new ArrayList<Printer>();
-						}
 						if (isChecked) {
 							tempCheckedPrinters.add(printers.get(which));
 						} else {
