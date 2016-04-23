@@ -170,7 +170,7 @@ public class QueryActivity extends Activity implements OnClickListener,
 				String printerStr = "";
 				if (checkedPrinters != null && checkedPrinters.size() > 0) {
 					for (int i = 0; i < checkedPrinters.size(); i++) {
-						printerStr += checkedPrinters.get(i);
+						printerStr += checkedPrinters.get(i).getNickname();
 						if (i < checkedPrinters.size() - 1) {
 							printerStr += ",";
 						}

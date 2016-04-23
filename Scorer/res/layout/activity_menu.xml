@@ -56,10 +56,16 @@
             android:text="授权"
             android:visibility="gone" />
 
-        <View
+        <Button
+            android:id="@+id/btn_menu_pin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/selector_bg_btn_menu"
+            android:drawableTop="@drawable/setting"
+            android:padding="10dp"
+            android:text="设置PIN码"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

@@ -6,9 +6,10 @@ import android.text.TextUtils;
 /**
  * Entity mapped to table "ACCOUNT".
  */
-public class Account {
+public class Account_ {
 	public static final int TYPE_MANAGER = 1;
 	public static final int TYPE_OPERATOR = 2;
+
     private Long id;
     /** Not-null value. */
     private String account;
@@ -16,14 +17,14 @@ public class Account {
     private String password;
     private int type;
 
-    public Account() {
+    public Account_() {
     }
 
-    public Account(Long id) {
+    public Account_(Long id) {
         this.id = id;
     }
 
-    public Account(Long id, String account, String password, int type) {
+    public Account_(Long id, String account, String password, int type) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -81,4 +82,5 @@ public class Account {
 			return false;
 		return true;
 	}
+
 }

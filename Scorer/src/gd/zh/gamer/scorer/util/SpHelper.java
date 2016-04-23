@@ -15,14 +15,15 @@ public class SpHelper {
 		return context.getSharedPreferences(SP_NAME_MAIN, Context.MODE_PRIVATE);
 	}
 
-	public static void savePin(Context context, String pin) {
+	public static boolean savePin(Context context, String pin) {
 		if (!isValidPin(pin))
 			throw new IllegalArgumentException();
 
-		if (getSp(context).edit().putString(SP_KEY_PIN, pin).commit())
+		if (getSp(context).edit().putString(SP_KEY_PIN, pin).commit()) {
 			sPin = pin;
-		else
-			ToastUtil.shortToast(context, "保存PIN码失败，请稍后再试");
+			return true;
+		} else
+			return false;
 	}
 
 	public static String getCachePin(Context context) {

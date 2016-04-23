@@ -215,21 +215,34 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 			return true;
 		}
 
+		long print_time = getPrintTimeByTimeString(ticket.getQrPrinterTime());
+		if (print_time == 0) {
+			print("无法兑换积分券，未知的日期");
+			return true;
+		}
+		DaoSession ds = dm.newSession();
+		RecordDao rd = ds.getRecordDao();
+
+		List<Record> rs = rd
+				.queryBuilder()
+				.where(RecordDao.Properties.Printer_id.eq(pid),
+						RecordDao.Properties.Print_time.eq(print_time)).list();
+		if (rs.size() == 1) {
+			print("兑换券已经兑换过了");
+			return true;
+		}
+		if (rs.size() != 0) {
+			throw new RuntimeException();
+		}
+
 		Record rec = new Record();
 		rec.setPrinter_id(pid);
 		rec.setExc_time(System.currentTimeMillis());
 		rec.setPin(ticket.getPin());
 		rec.setScore(ticket.getValue() * ticket.getRatioX()
 				+ ticket.getAddtionValueN());
-		long print_time = getPrintTimeByTimeString(ticket.getQrPrinterTime());
-		if (print_time == 0) {
-			print("无法兑换积分券，未知的日期");
-			return true;
-		}
 		rec.setPrint_time(print_time);
 
-		DaoSession ds = dm.newSession();
-		RecordDao rd = ds.getRecordDao();
 		if (rd.insert(rec) > 0) {
 			print("兑换成功!");
 		} else {
@@ -275,7 +288,7 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 		int count = printers.size();
 		if (count > 1 || count < 0)
 			throw new RuntimeException();
-		return printers.get(0).getId();
+		return count == 0 ? 0 : printers.get(0).getId();
 	}
 
 	private void print(String text) {

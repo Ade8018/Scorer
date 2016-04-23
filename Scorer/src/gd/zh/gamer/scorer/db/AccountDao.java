@@ -40,7 +40,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ACCOUNT\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ACCOUNT\" TEXT NOT NULL ," + // 1: account
                 "\"PASSWORD\" TEXT NOT NULL ," + // 2: password
                 "\"TYPE\" INTEGER NOT NULL );"); // 3: type

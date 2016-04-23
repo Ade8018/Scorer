@@ -135,8 +135,13 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 
 	private QueryBuilder<Record> getBaseBuilder() {
 		QueryBuilder<Record> qb = mRd.queryBuilder();
-		qb.where(RecordDao.Properties.Printer_id.in(printerIds));
-
+		if (printerIds.length > 1) {
+			qb.where(RecordDao.Properties.Printer_id.in(printerIds));
+		} else if(printerIds.length==1) {
+			qb.where(RecordDao.Properties.Printer_id.eq(printerIds[0]));
+		}else{
+			throw new RuntimeException();
+		}
 		if (mPrintTimeStart > 0) {
 			qb.where(Properties.Print_time.gt(mPrintTimeStart));
 		}

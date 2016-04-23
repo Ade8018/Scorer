@@ -19,6 +19,7 @@ import com.google.zxing.client.android.CaptureActivity;
 
 public class MenuActivity extends Activity implements OnClickListener {
 	private Button btnAuth;
+	private Button btnPin;
 	private Account account;
 
 	@Override
@@ -48,6 +49,10 @@ public class MenuActivity extends Activity implements OnClickListener {
 			btnAuth = (Button) findViewById(R.id.btn_menu_authorize);
 			btnAuth.setVisibility(View.VISIBLE);
 			btnAuth.setOnClickListener(this);
+
+			btnPin = (Button) findViewById(R.id.btn_menu_pin);
+			btnPin.setVisibility(View.VISIBLE);
+			btnPin.setOnClickListener(this);
 		}
 
 		findViewById(R.id.btn_menu_history).setOnClickListener(this);
@@ -67,6 +72,10 @@ public class MenuActivity extends Activity implements OnClickListener {
 		case R.id.btn_menu_scan:
 			Intent scan = new Intent(this, CaptureActivity.class);
 			startActivity(scan);
+			break;
+		case R.id.btn_menu_pin:
+			Intent pin = new Intent(this, PinActivity.class);
+			startActivity(pin);
 			break;
 		}
 	}

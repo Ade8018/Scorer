@@ -66,6 +66,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="gd.zh.gamer.scorer.ui.activity.PinActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
         <!--
         <activity
             android:name="gd.zh.gamer.scorer.ui.activity.ConditionActivity"
