@@ -165,6 +165,7 @@ public class QueryActivity extends Activity implements OnClickListener,
 					checkedPrinters = new ArrayList<Printer>();
 				}
 				if (tempCheckedPrinters != null) {
+					checkedPrinters.clear();
 					checkedPrinters.addAll(tempCheckedPrinters);
 				}
 				String printerStr = "";

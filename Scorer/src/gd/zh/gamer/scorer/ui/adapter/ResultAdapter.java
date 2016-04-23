@@ -8,7 +8,10 @@ import gd.zh.gamer.scorer.db.RecordDao;
 import gd.zh.gamer.scorer.db.RecordDao.Properties;
 import gd.zh.gamer.scorer.entity.Record;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,8 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 	private long mExcTimeEnd;
 	private long printerIds[];
 	private RecordDao mRd;
+	private SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss",
+			Locale.CHINA);
 
 	public ResultAdapter(long ptStart, long ptEnd, long etStart, long etEnd,
 			long ids[]) {
@@ -99,8 +104,8 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 			vh.tvId.setText(r.getId() + "");
 			vh.tvPrinter.setText(r.getPrinter().getNickname());
 			vh.tvScore.setText(r.getScore() + "");
-			vh.tvPrintTime.setText(r.getPrint_time() + "");
-			vh.tvExcTime.setText(r.getExc_time() + "");
+			vh.tvPrintTime.setText(format.format(new Date(r.getPrint_time())));
+			vh.tvExcTime.setText(format.format(new Date(r.getExc_time())));
 		}
 		return convertView;
 	}
@@ -137,9 +142,9 @@ public class ResultAdapter extends BaseAdapter implements OnClickListener {
 		QueryBuilder<Record> qb = mRd.queryBuilder();
 		if (printerIds.length > 1) {
 			qb.where(RecordDao.Properties.Printer_id.in(printerIds));
-		} else if(printerIds.length==1) {
+		} else if (printerIds.length == 1) {
 			qb.where(RecordDao.Properties.Printer_id.eq(printerIds[0]));
-		}else{
+		} else {
 			throw new RuntimeException();
 		}
 		if (mPrintTimeStart > 0) {
