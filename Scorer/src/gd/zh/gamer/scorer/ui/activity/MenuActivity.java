@@ -1,33 +1,45 @@
 package gd.zh.gamer.scorer.ui.activity;
 
-import java.util.List;
-
 import gd.zh.gamer.scorer.App;
 import gd.zh.gamer.scorer.R;
 import gd.zh.gamer.scorer.db.AccountDao;
 import gd.zh.gamer.scorer.db.DaoMaster;
 import gd.zh.gamer.scorer.db.DaoSession;
 import gd.zh.gamer.scorer.entity.Account;
+import gd.zh.gamer.scorer.util.ToastUtil;
+
+import java.util.List;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
 
+@SuppressLint("InflateParams")
 public class MenuActivity extends Activity implements OnClickListener {
 	private Button btnAuth;
 	private Button btnPin;
 	private Account account;
+	private DaoMaster dm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 
-		DaoMaster dm = new DaoMaster(App.db);
+		dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();
 		AccountDao ad = ds.getAccountDao();
 		List<Account> accs = ad.loadAll();
@@ -82,13 +94,47 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 	private void onQuery() {
 		if (isManager()) {
-			Intent query = new Intent(this, QueryActivity.class);
-			startActivity(query);
+			startQueryActivity();
 		} else {
-			// TODO pop dialog to ask manager pwd
+			AlertDialog.Builder builder = new Builder(this);
+			final EditText et = (EditText) LayoutInflater.from(this).inflate(
+					R.layout.password_edit, null, false);
+			builder.setTitle("验证管理员密码");
+			builder.setView(et);
+			builder.setNegativeButton("取消",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			builder.setPositiveButton("确定",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							String pwd = et.getText().toString();
+							DaoSession ds = dm.newSession();
+							AccountDao ad = ds.getAccountDao();
+							if (ad.queryBuilder()
+									.where(AccountDao.Properties.Password
+											.eq(pwd)).count() == 1) {
+								startQueryActivity();
+							} else {
+								ToastUtil
+										.shortToast(MenuActivity.this, "密码错误！");
+							}
+							dialog.dismiss();
+						}
+					});
 
+			builder.create().show();
 		}
 
+	}
+
+	private void startQueryActivity() {
+		Intent query = new Intent(this, QueryActivity.class);
+		startActivity(query);
 	}
 
 	private boolean isManager() {

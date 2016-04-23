@@ -10,6 +10,7 @@ import gd.zh.gamer.scorer.entity.Printer;
 import gd.zh.gamer.scorer.util.DaoUtil;
 import gd.zh.gamer.scorer.util.L;
 import gd.zh.gamer.scorer.util.QrCodeUtil;
+import gd.zh.gamer.scorer.util.SpHelper;
 
 import java.util.List;
 
@@ -58,7 +59,8 @@ public class AuthorizeActivity extends Activity {
 	private String getAuthString(Account acc) {
 
 		String result = "!" + acc.getAccount() + ",@" + acc.getPassword()
-				+ ",#" + ManagerBindActivity.REGISTER_CODE;
+				+ ",#" + ManagerBindActivity.REGISTER_CODE + ",$"
+				+ SpHelper.getCachePin(this);
 
 		DaoMaster dm = new DaoMaster(App.db);
 		DaoSession ds = dm.newSession();

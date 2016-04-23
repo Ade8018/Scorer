@@ -44,7 +44,7 @@ public class QueryActivity extends Activity implements OnClickListener,
 	private long mExcStartTime;
 	private long mExcEndTime;
 	private List<Printer> printers;
-	private List<Printer> checkedPrinters;
+	private List<Printer> checkedPrinters = new ArrayList<Printer>();
 	private List<Printer> tempCheckedPrinters;
 
 	@Override

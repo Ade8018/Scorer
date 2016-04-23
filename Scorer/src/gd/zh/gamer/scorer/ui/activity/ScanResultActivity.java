@@ -14,6 +14,7 @@ import gd.zh.gamer.scorer.entity.Account;
 import gd.zh.gamer.scorer.entity.Printer;
 import gd.zh.gamer.scorer.entity.Record;
 import gd.zh.gamer.scorer.util.DaoUtil;
+import gd.zh.gamer.scorer.util.L;
 import gd.zh.gamer.scorer.util.QrCodeUtil;
 import gd.zh.gamer.scorer.util.SpHelper;
 import gd.zh.gamer.scorer.util.ToastUtil;
@@ -35,6 +36,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class ScanResultActivity extends Activity implements OnClickListener {
+	public static final String TAG = "ScanResultActivity";
 	public static final String INTENT_EXTRA_KEY_SCAN_RESULT = "scan_result";
 	private Account account;
 	private String scanText;
@@ -114,20 +116,26 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 		if (arr[2].startsWith("#")) {
 			regCode = arr[2].substring(1);
 		}
+		String pin = null;
+		if (arr[3].startsWith("$")) {
+			pin = arr[3].substring(1);
+		}
 		List<Printer> ps = new ArrayList<Printer>();
-		for (int i = 3; i < arr.length; i++) {
-			String[] parr = arr[i].split("|");
+		for (int i = 4; i < arr.length; i++) {
+			String[] parr = arr[i].split("\\|");
 			if (parr.length != 2) {
 				return false;
 			}
 			ps.add(new Printer(null, parr[1], parr[0], 0));
 		}
-
 		if (!isRightRegisterCode(regCode)) {
 			return false;
 		}
 		if (!Account.isValidAccountOrPwd(acc)
 				|| !Account.isValidAccountOrPwd(pwd)) {
+			return false;
+		}
+		if (!SpHelper.isValidPin(pin)) {
 			return false;
 		}
 
@@ -136,7 +144,7 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 		AccountDao accountDao = ds.getAccountDao();
 		long insertResult = accountDao.insert(a);
 
-		if (insertResult > 0 && savePrinters(ps)) {
+		if (insertResult > 0 && savePrinters(ps) && SpHelper.savePin(this, pin)) {
 			print("注册成功!");
 			btn2Menu.setVisibility(View.VISIBLE);
 		} else {
@@ -275,6 +283,8 @@ public class ScanResultActivity extends Activity implements OnClickListener {
 	}
 
 	private boolean isRightPin(String pin) {
+		L.e(TAG, "local pin:" + SpHelper.getCachePin(this) + "  coming pin:"
+				+ pin);
 		return TextUtils.equals(pin, SpHelper.getCachePin(this));
 	}
 
